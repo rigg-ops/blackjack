@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+
 
 public class Deck : MonoBehaviour
 {
@@ -11,9 +13,9 @@ public class Deck : MonoBehaviour
     public Button playAgainButton;
     public Text finalMessage;
     public Text probMessage;
-
-    public Text bancaText;
-    public Text apuestaText;
+    
+    public TextMeshProUGUI bancaText;
+    public TextMeshProUGUI apuestaText;
 
     public int[] values = new int[52];
     int cardIndex = 0;
