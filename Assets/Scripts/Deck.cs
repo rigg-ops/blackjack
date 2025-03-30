@@ -12,9 +12,16 @@ public class Deck : MonoBehaviour
     public Text finalMessage;
     public Text probMessage;
 
+    public Text bancaText;
+    public Text apuestaText;
+
     public int[] values = new int[52];
-    int cardIndex = 0;    
-       
+    int cardIndex = 0;
+
+    int banca = 1000;
+    int apuesta = 0;
+
+
     private void Awake()
     {    
         InitCardValues();        
@@ -71,6 +78,18 @@ public class Deck : MonoBehaviour
 
     void StartGame()
     {
+        if (apuesta == 0 || apuesta > banca)
+        {
+            finalMessage.text = "Debes hacer una apuesta válida antes de jugar.";
+            ToggleButtons(false);
+            return;
+        }
+
+        banca -= apuesta;
+        ActualizarBanca();
+
+
+
         for (int i = 0; i < 2; i++)
         {
             PushPlayer();
@@ -208,24 +227,30 @@ public class Deck : MonoBehaviour
 
         int playerPoints = player.GetComponent<CardHand>().points;
 
-        if (dealerPoints > 21)
+        if (dealerPoints > 21 || playerPoints > dealerPoints)
         {
-            finalMessage.text = "El dealer se pasa. ¡Ganas!";
-        }
-        else if (dealerPoints > playerPoints)
-        {
-            finalMessage.text = "El dealer gana.";
+            finalMessage.text = "¡Ganaste!";
+            banca += apuesta * 2;
         }
         else if (dealerPoints < playerPoints)
         {
             finalMessage.text = "¡Ganaste!";
+            banca += apuesta * 2;
+        }
+        else if (dealerPoints > playerPoints)
+        {
+            finalMessage.text = "Perdiste.";
         }
         else
         {
             finalMessage.text = "Empate.";
-        }
-
+            banca += apuesta; // en empate, devuelve lo apostado
+        } 
+        
         ToggleButtons(false);
+
+        ActualizarBanca();
+
 
     }
 
@@ -242,6 +267,10 @@ public class Deck : MonoBehaviour
         cardIndex = 0;
         ShuffleCards();
         StartGame();
+
+        apuesta = 0;
+        ActualizarBanca();
+
     }
 
     void ToggleButtons(bool state)
@@ -249,4 +278,27 @@ public class Deck : MonoBehaviour
         hitButton.interactable = state;
         stickButton.interactable = state;
     }
+
+    void ActualizarBanca()
+    {
+        bancaText.text = "Banca: " + banca + "€";
+        apuestaText.text = "Apuesta: " + apuesta + "€";
+
+    }
+
+    public void Apostar10()
+    {
+        if (banca >= 10)
+        {
+            apuesta += 10;
+            ActualizarBanca();
+        }
+    }
+
+    public void ResetApuesta()
+    {
+        apuesta = 0;
+        ActualizarBanca();
+    }
+
 }
