@@ -270,9 +270,10 @@ public class Deck : MonoBehaviour
         ShuffleCards();
         StartGame();
 
-        apuesta = 0;
+        
         ActualizarBanca();
 
+       
     }
 
     void ToggleButtons(bool state)
@@ -283,7 +284,7 @@ public class Deck : MonoBehaviour
 
     void ActualizarBanca()
     {
-        bancaText.text = "Banca: " + banca + "€";
+        bancaText.text = "Crédito: " + banca + "€";
         apuestaText.text = "Apuesta: " + apuesta + "€";
 
     }
